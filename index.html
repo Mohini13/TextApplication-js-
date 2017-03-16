@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css" type="text/css" media="all" />
+ <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>       
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title></title>
+	
+	<style>
+	* {
+    box-sizing: border-box;
+	
+   }
+	.tblData{
+	background-color:lavender;
+	margin: 40px;
+	height: 100px;
+	text-align:center;
+	}
+	
+	.rowtxt{
+	  padding: 40px;
+	
+	}
+</style>
+</head>
+
+
+<div class="container">
+  <h2>Welcome! </h2>
+    <form id="frmPerson" class="form-horizontal">
+        <div class="form-group">
+           <label for="txtID" class="col-sm-2 control-label">Enter the text</label>
+             <div class="col-sm-4">
+             <input type="text" id="txtID" class="form-control" placeholder="Enter the text">
+             </div>
+        </div>                    
+               
+        <div class="form-group">
+           <div class="col-lg-offset-2 col-sm-4">
+                <input type="submit" value="Add" id="btnSave" class="btn btn-success"/>
+            </div>
+        </div>
+    </form>
+ </div>   
+		
+		
+		
+<div class="container">
+      <div class="row" id="tblList">
+      </div>
+</div>
+
+
+<div id="footer">
+    <div class="container">
+        <p class="text-muted credit">© Copyright 2017 narrowcontent. All rights reserved</p>
+    </div>
+</div>
+
+
+		
+	<script>
+		$(function () {
+            var operation = "C"; //"C"=Create
+			var selected_index = -1; 
+			var txtData = localStorage.getItem("txtData"); 
+			txtData = JSON.parse(txtData); 
+				if (txtData === null) 
+				txtData = [];
+
+		function Create() {		
+			var person = JSON.stringify({
+			ID: $("#txtID").val()
+			}); 
+			txtData.push(person);
+			localStorage.setItem("txtData", JSON.stringify(txtData));
+			confirm("In order to add text please confirm it");
+			return true;
+		}
+
+		function Delete() {
+			txtData.splice(selected_index, 1); 
+			localStorage.setItem("txtData", JSON.stringify(txtData)); 
+			alert("remove the text"); 
+		}
+
+		function List() {
+			$(".row").html("");
+			$(".row").html(); 
+			for (var i in txtData) {
+				var per = JSON.parse(txtData[i]);
+						$(".row").append("<div>" +
+											"<div class='col-lg-3 tblData' id='tdata'>"+
+											"<header style='float:right;'>" +
+											"<img src='delete.png' alt='Delete" + i + "  ' id='btnDelete'/>" +
+											"</header>" +
+								  
+											"<div class='rowtxt'>"
+											+ per.ID + 
+											"</div>"+
+											"</div>"+
+              
+											"</div>"
+										);
+									}	 
+						}
+
+		$("#frmPerson").bind("submit", function () {
+			if (operation === "C")
+			return Create();
+			}); 
+  
+			List();
+
+
+		$("#btnDelete").bind("click", function () {
+			selected_index = parseInt($(this).attr("alt").replace("Delete", "")); 
+			Delete(); 
+			List(); 
+			});
+		
+		
+	});
+
+
+	</script>
+
+</body>
+</html>
